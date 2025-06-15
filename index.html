@@ -38,6 +38,7 @@
       top: 0;
       left: 0;
       z-index: 10;
+      background: black;
     }
   </style>
 </head>
@@ -46,17 +47,25 @@
   <p>Touch this smiley face 😄</p>
   <div id="smiley">😄</div>
 
-  <video id="video" src="DADA.mp4" controls playsinline></video>
+  <video id="video" src="DADA.mp4" muted controls playsinline></video>
 
   <script>
     const smiley = document.getElementById('smiley');
     const video = document.getElementById('video');
 
-    smiley.addEventListener('click', () => {
+    smiley.addEventListener('click', async () => {
       smiley.style.display = 'none';
       video.style.display = 'block';
-      video.requestFullscreen().catch(() => {}); // Request fullscreen
-      video.play();
+
+      try {
+        await video.requestFullscreen();
+      } catch (err) {
+        console.warn("Fullscreen not available", err);
+      }
+
+      video.play().catch((e) => {
+        console.error("Video play failed:", e);
+      });
     });
   </script>
 </body>
